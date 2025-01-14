@@ -15,7 +15,7 @@ public class CarController : MonoBehaviour
     private void Start()
     {
         float3 startPos = splineContainer.EvaluatePosition(0f);
-        transform.position = new Vector3(startPos.x, startPos.y, startPos.z);
+        transform.position = new Vector3(startPos.x-1f, startPos.y, startPos.z);
     }
     private void Update()
     {
@@ -49,11 +49,8 @@ public class CarController : MonoBehaviour
 
     }
 
-    private void OnCollisionEnter(Collision car)
+    public float GetDistanceAlongSpline()
     {
-        if (car.collider.CompareTag("end"))
-        {
-            typingSpeedCalculator.gameObject.SetActive(false);
-        }
+        return distanceAlongSpline;
     }
 }

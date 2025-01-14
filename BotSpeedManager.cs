@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BotSpeedManager : MonoBehaviour
 {
-    public static float botSpeed = 0f; 
+    public static float botSpeed = 50f; 
+    public static float totalTime = 15f;
 }

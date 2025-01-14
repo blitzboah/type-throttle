@@ -7,6 +7,7 @@ public class TypingSpeedCalculator : MonoBehaviour
     [SerializeField] private InputField inputField;
     [SerializeField] private Text wpmText;
     [SerializeField] private Text wordsText;
+    private AudioManager audioManager;
     private string[] words;
     private string currentWord;
     private float lastWordCompletionTime;
@@ -16,7 +17,12 @@ public class TypingSpeedCalculator : MonoBehaviour
     private string lastInput = "";
     private const float CHARS_PER_WORD = 3f;
     public int wpm;
+    private bool audioPlayed = false;
 
+    private void Awake()
+    {
+        audioManager = FindObjectOfType<AudioManager>();
+    }
     private void Start()
     {
         gameStartTime = Time.time;
@@ -45,6 +51,12 @@ public class TypingSpeedCalculator : MonoBehaviour
             DisplayWords();
         }
         UpdateWpm();
+
+        if(!audioPlayed && wpm >= 1f)
+        {
+            audioPlayed = true;
+            FindObjectOfType<PlayerCarAudio>().PlayEngineSound();
+        }
     }
 
     private void DisplayWords()
@@ -93,8 +105,9 @@ public class TypingSpeedCalculator : MonoBehaviour
             }
             DisplayWords();
         }
-        else if (input.Length > currentWord.Length)
+        else if (input.Length >= currentWord.Length)
         {
+            audioManager.Play("race-car-downshift"); //adding a downshift sfx for fumbling yeah i am genius
             DisplayWords();
         }
 

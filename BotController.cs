@@ -5,7 +5,7 @@ using UnityEngine.Splines;
 public class BotController : MonoBehaviour
 {
     [SerializeField] private SplineContainer splineContainer;
-    [SerializeField]float speed = BotSpeedManager.botSpeed; //get the speed from botspeedmanager
+    [SerializeField]private float speed;
     [SerializeField] float accelerationTime = 3f;
     [SerializeField] float currentSpeed = 0f;
 
@@ -18,6 +18,8 @@ public class BotController : MonoBehaviour
 
     void Start()
     {
+        speed = BotSpeedManager.botSpeed;
+        //Debug.Log(speed);
         //align car position with spline 
         float3 startPos = splineContainer.EvaluatePosition(0f);
         transform.position = new Vector3(startPos.x, startPos.y, startPos.z);
@@ -54,5 +56,10 @@ public class BotController : MonoBehaviour
             Vector3 movement = freeMovementDirection * currentSpeed * Time.deltaTime;
             transform.position += movement;
         }
+    }
+
+    public float GetDistanceAlongSpline()
+    {
+        return distanceAlongSpline;
     }
 }
