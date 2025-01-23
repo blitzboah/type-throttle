@@ -8,12 +8,26 @@ public class MenuManager : MonoBehaviour
     [SerializeField] Dropdown wpmDropdown;
     [SerializeField] Dropdown timeDropdown;
     [SerializeField] Text wpmText;
+    [SerializeField] Toggle adaptiveToggle;
+    [SerializeField] Button audioOn;
+    [SerializeField] Button audioOff;
     AudioManager audioManager;
 
     private void Awake()
     {
         audioManager = FindObjectOfType<AudioManager>();
+        if (!AudioListener.pause == true)
+        {
+            audioOn.gameObject.SetActive(true);
+            audioOff.gameObject.SetActive(false);
+        }
+        else
+        {
+            audioOn.gameObject.SetActive(false);
+            audioOff.gameObject.SetActive(true);
+        }
     }
+
     public void Quit()
     {
         audioManager.Play("click-sound");
@@ -28,7 +42,7 @@ public class MenuManager : MonoBehaviour
         {
             if (float.TryParse(setWpmField.text, out float customWpm))
             {
-                BotSpeedManager.botSpeed = customWpm;
+                BotSpeedManager.botSpeed = Mathf.Abs(customWpm); //nice try negative diddy
             }
         }
         else
@@ -38,6 +52,7 @@ public class MenuManager : MonoBehaviour
 
         string selectedTimeOption = timeDropdown.options[timeDropdown.value].text;
         BotSpeedManager.totalTime = float.Parse(selectedTimeOption);
+        BotSpeedManager.isAdaptive = adaptiveToggle.isOn;
 
         audioManager.Play("click-sound");
         SceneManager.LoadScene("main");
@@ -65,6 +80,16 @@ public class MenuManager : MonoBehaviour
     public void ClickSound()
     {
         audioManager.Play("click-sound");
+    }
+
+    public void MuteAudio()
+    {
+        AudioListener.pause = true;
+    }
+
+    public void UnmuteAudio()
+    {
+        AudioListener.pause = false;
     }
 
 }

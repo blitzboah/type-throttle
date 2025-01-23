@@ -1,13 +1,17 @@
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance; // singleton instance
-
     public Sound[] sounds;
 
+    private void Start()
+    {
+        Application.targetFrameRate = 60;
+    }
     private void Awake()
     {
         // ensure only one instance exists
@@ -38,6 +42,7 @@ public class AudioManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+
         if (scene.name == "main menu")
         {
             Play("main-menu-theme");
@@ -73,7 +78,6 @@ public class AudioManager : MonoBehaviour
             Debug.LogWarning($"Sound '{name}' not found!");
         }
     }
-
     private void OnDestroy()
     {
         // unsubscribe from scene loaded event to avoid memory leaks

@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
         FindObjectOfType<BotCarAudio>().StopEngineSound();
         typingPanel.gameObject.SetActive(false);
         gameOverPanel.gameObject.SetActive(true);
-        if(difference > 0f && finalWpm > BotSpeedManager.botSpeed)
+        if(difference > 0f)
         {
             loseImage.gameObject.SetActive(false);
             winImage.gameObject.SetActive(true);

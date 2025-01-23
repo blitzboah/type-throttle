@@ -7,17 +7,22 @@ public class TypingSpeedCalculator : MonoBehaviour
     [SerializeField] private InputField inputField;
     [SerializeField] private Text wpmText;
     [SerializeField] private Text wordsText;
+    [SerializeField] private WordList wordList;
     private AudioManager audioManager;
-    private string[] words;
     private string currentWord;
     private float lastWordCompletionTime;
     private float gameStartTime;
     private int totalCharsTyped;
     private float errorPenalty;
     private string lastInput = "";
-    private const float CHARS_PER_WORD = 3f;
+    private const float CHARS_PER_WORD = 3f; //the reason for not putting 5 in here coz the words appear one by one and not in a sequence, doing 5 would drop down wpm significantly
+    //for the game that is reflex based 3 was the option i had to take
     public int wpm;
     private bool audioPlayed = false;
+
+    public int wordCount { get; private set; } = 0;
+
+
 
     private void Awake()
     {
@@ -28,13 +33,6 @@ public class TypingSpeedCalculator : MonoBehaviour
         gameStartTime = Time.time;
         totalCharsTyped = 0;
         errorPenalty = 0;
-        words = new string[] { "answer", "foster", "voyage", "delete", "locate", "crutch",
-            "deputy", "mother", "harbor", "nuance", "extend", "cheque", "linear", "credit",
-            "winner", "murder", "script", "betray", "growth", "waiter", "horror", "minute",
-            "ensure", "gallon", "linger", "depend", "barrel", "temple", "exotic", "chance",
-            "clique", "deadly", "school", "defeat", "grudge", "deport", "devote", "prayer",
-            "wonder", "notice", "regard", "memory", "couple", "stress", "excuse", "summer",
-            "tablet", "garlic", "mosaic", "colony" }; //hardcoded for now
         inputField.interactable = false;
         inputField.onValueChanged.AddListener(CheckWord);
     }
@@ -43,6 +41,7 @@ public class TypingSpeedCalculator : MonoBehaviour
     {
         if (!RaceCountdown.raceStarted) return;
 
+        if(Input.GetKeyDown(KeyCode.Return)) inputField.ActivateInputField();
         if (!inputField.interactable)
         {
             inputField.interactable = true;
@@ -61,7 +60,8 @@ public class TypingSpeedCalculator : MonoBehaviour
 
     private void DisplayWords()
     {
-        currentWord = words[Random.Range(0, words.Length)];
+        wordCount++;
+        currentWord = GetRandomWord();
         wordsText.text = currentWord;
         inputField.text = "";
         lastInput = "";
@@ -128,6 +128,12 @@ public class TypingSpeedCalculator : MonoBehaviour
         {
             wpmText.text = "WPM: 0";
         }
+    }
+
+    public string GetRandomWord()
+    {
+        int randomIndex = Random.Range(0, wordList.words.Length);
+        return wordList.words[randomIndex];
     }
 
     public float GetWpm()
